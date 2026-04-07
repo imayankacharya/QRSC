@@ -16,29 +16,67 @@
 }
 body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;max-width:480px;margin:0 auto}
 
-/* HEADER */
 .hdr{background:var(--GD);color:#fff;padding:14px 18px;display:flex;align-items:center;gap:12px;position:sticky;top:0;z-index:100}
 .hdr-icon{font-size:22px}
 .hdr h1{font-size:16px;font-weight:700;letter-spacing:-.3px}
 .hdr p{font-size:11px;opacity:.7;margin-top:1px}
-.sync-dot{width:8px;height:8px;border-radius:50%;background:#4ade80;margin-left:auto;animation:pulse 2s infinite}
-@keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
+.sync-dot{width:8px;height:8px;border-radius:50%;background:#4ade80;margin-left:auto;animation:blink 2s infinite}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.4}}
 
-/* TABS */
 .tabs{display:flex;background:var(--card);border-bottom:1px solid var(--border);position:sticky;top:60px;z-index:99}
 .tab{flex:1;padding:12px 4px;font-size:12px;font-weight:600;text-align:center;cursor:pointer;border-bottom:2.5px solid transparent;color:var(--muted);transition:.2s}
 .tab.on{color:var(--GD);border-color:var(--G)}
 
-/* PAGES */
 .pg{display:none;padding:16px;min-height:calc(100vh - 110px)}
 .pg.on{display:block}
 
-/* SCANNER */
-#qr-reader{border-radius:var(--radius);overflow:hidden;background:#000;width:100%}
-#qr-reader video{width:100%;border-radius:var(--radius)}
-.hint{text-align:center;font-size:12px;color:var(--muted);margin:8px 0 16px}
+/* ── CAMERA AREA ── */
+.cam-wrap{
+  width:100%;
+  background:#111;
+  border-radius:var(--radius);
+  overflow:hidden;
+  position:relative;
+  min-height:300px;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+}
+#qr-reader{width:100%}
+#qr-reader video{width:100%!important;border-radius:0!important}
+/* hide the html5-qrcode default UI clutter */
+#qr-reader img{display:none!important}
+#qr-reader>div:not([id]){display:none!important}
 
-.result-box{border-radius:var(--radius);padding:18px;margin-top:16px;display:none;border:1.5px solid}
+.cam-placeholder{
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  gap:14px;padding:40px 24px;text-align:center;color:#fff;
+}
+.cam-placeholder .cam-icon{font-size:48px;opacity:.6}
+.cam-placeholder p{font-size:14px;opacity:.7;line-height:1.5}
+
+.start-cam-btn{
+  padding:13px 32px;border-radius:40px;border:none;
+  background:var(--G);color:#fff;font-size:15px;font-weight:700;
+  cursor:pointer;display:flex;align-items:center;gap:8px;
+  box-shadow:0 4px 16px rgba(26,122,74,.4);
+  transition:.15s;
+}
+.start-cam-btn:active{transform:scale(.97);opacity:.9}
+
+.cam-status{
+  position:absolute;bottom:0;left:0;right:0;
+  background:rgba(0,0,0,.55);color:#fff;
+  font-size:12px;padding:8px 14px;text-align:center;
+  backdrop-filter:blur(4px);display:none;
+}
+.cam-status.show{display:block}
+
+.hint{text-align:center;font-size:12px;color:var(--muted);margin:8px 0 14px}
+
+/* ── RESULTS ── */
+.result-box{border-radius:var(--radius);padding:18px;margin-top:14px;display:none;border:1.5px solid}
 .result-box.ok{background:var(--GL);border-color:#9FE1CB}
 .result-box.err{background:var(--RL);border-color:#f5c6c4}
 .result-box.warn{background:var(--AL);border-color:#f5d49a}
@@ -69,13 +107,12 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 .confirm-btn:active{opacity:.85}
 .scan-again{margin-top:10px;width:100%;padding:11px;border-radius:10px;border:1px solid var(--border);background:#fff;font-size:13px;cursor:pointer;font-weight:500;color:var(--muted)}
 
-/* BADGE */
 .badge{display:inline-flex;align-items:center;gap:5px;font-size:11px;font-weight:600;padding:3px 9px;border-radius:20px;margin:1px}
 .bv{background:var(--GL);color:var(--GD)}
 .bn{background:var(--RL);color:#7d2020}
 .ba{background:var(--AL);color:#7d4a0a}
 
-/* SEARCH PAGE */
+/* ── LIST ── */
 .search-wrap{position:relative;margin-bottom:14px}
 .search-wrap input{width:100%;padding:11px 14px 11px 38px;border-radius:10px;border:1px solid var(--border);font-size:14px;background:#fff;outline:none}
 .search-wrap input:focus{border-color:var(--G);box-shadow:0 0 0 3px rgba(26,122,74,.1)}
@@ -100,7 +137,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 .ci-status.ok{color:var(--GD)}
 .ci-status.used{color:var(--R)}
 
-/* MODAL */
+/* ── MODAL ── */
 .modal-bg{display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:200;align-items:flex-end;justify-content:center}
 .modal-bg.on{display:flex}
 .modal{background:#fff;border-radius:20px 20px 0 0;padding:20px 18px 30px;width:100%;max-height:80vh;overflow-y:auto}
@@ -112,7 +149,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 .m-val{font-weight:600;text-align:right;max-width:65%}
 .reset-btn{margin-top:14px;width:100%;padding:11px;border-radius:10px;border:1.5px solid var(--R);background:var(--RL);color:var(--R);font-size:13px;font-weight:600;cursor:pointer}
 
-/* ADMIN */
+/* ── ADMIN ── */
 .admin-section{background:var(--card);border-radius:var(--radius);border:1px solid var(--border);padding:16px;margin-bottom:14px}
 .admin-section h3{font-size:13px;font-weight:700;color:var(--muted);margin-bottom:12px;letter-spacing:.5px}
 .admin-row{display:flex;justify-content:space-between;align-items:center;padding:6px 0;font-size:14px}
@@ -121,18 +158,17 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 .export-btn{border:1.5px solid var(--G);background:var(--GL);color:var(--GD)}
 .reset-all-btn{border:1.5px solid var(--R);background:var(--RL);color:var(--R)}
 
-/* TOAST */
+/* ── TOAST ── */
 .toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(100px);background:#111;color:#fff;padding:10px 22px;border-radius:30px;font-size:13px;font-weight:500;transition:.3s;z-index:500;pointer-events:none;white-space:nowrap}
 .toast.show{transform:translateX(-50%) translateY(0)}
-
-/* LOADER */
-.loader{text-align:center;padding:16px;font-size:13px;color:var(--muted)}
 
 .empty{text-align:center;padding:40px 20px;color:var(--muted)}
 .empty .ei{font-size:36px;margin-bottom:10px}
 
 @media(prefers-color-scheme:dark){
   :root{--bg:#1a1e1a;--card:#252a25;--border:rgba(255,255,255,.1);--text:#f0f0f0;--muted:#999}
+  .fbtn.veg,.fbtn.nv{background:#252a25}
+  .scan-again{background:#252a25;color:#999}
 }
 </style>
 </head>
@@ -140,7 +176,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 
 <div class="hdr">
   <div class="hdr-icon">🎟</div>
-  <div><h1>IISER KOL Coupon Scanner</h1><p>420 coupons · cross-device sync</p></div>
+  <div><h1>IISER KOL Coupon Scanner</h1><p id="hdr-sub">420 coupons · tap to start camera</p></div>
   <span class="sync-dot" id="sync-dot" title="Sync status"></span>
 </div>
 
@@ -152,8 +188,23 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 
 <!-- SCAN TAB -->
 <div class="pg on" id="pg-scan">
-  <div id="qr-reader"></div>
-  <p class="hint">Point camera at coupon QR code</p>
+
+  <div class="cam-wrap" id="cam-wrap">
+    <!-- placeholder shown before camera starts -->
+    <div class="cam-placeholder" id="cam-placeholder">
+      <div class="cam-icon">📷</div>
+      <p>Tap the button below to open your camera and scan a coupon QR code</p>
+      <button class="start-cam-btn" onclick="startScanner()">
+        <span>📸</span> Open Camera
+      </button>
+    </div>
+    <!-- qr-reader injected here, hidden until started -->
+    <div id="qr-reader" style="width:100%;display:none"></div>
+    <div class="cam-status" id="cam-status"></div>
+  </div>
+
+  <p class="hint" id="cam-hint">Camera requires HTTPS and permission to work</p>
+
   <div class="result-box" id="result-box">
     <div class="rb-title" id="rb-title"></div>
     <div id="rb-rows"></div>
@@ -167,7 +218,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 <div class="pg" id="pg-list">
   <div class="stats">
     <div class="stat sv"><div class="n" id="sv-count">0</div><div class="l">Veg Active</div></div>
-    <div class="stat sn"><div class="n" id="sn-count">0</div><div class="l">Non-Veg Active</div></div>
+    <div class="stat sn"><div class="n" id="sn-count">0</div><div class="l">NV Active</div></div>
     <div class="stat sb"><div class="n" id="sb-count">0</div><div class="l">Used</div></div>
   </div>
   <div class="search-wrap">
@@ -201,7 +252,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
   </div>
 </div>
 
-<!-- COUPON DETAIL MODAL -->
+<!-- MODAL -->
 <div class="modal-bg" id="modal-bg" onclick="closeModal(event)">
   <div class="modal" id="modal">
     <span class="modal-close" onclick="closeModal()">✕</span>
@@ -214,235 +265,160 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 <div class="toast" id="toast"></div>
 
 <script>
-// ─────────────────────────────────────────────────────────────────────────────
-// COUPON DATA (embedded from Excel)
-// ─────────────────────────────────────────────────────────────────────────────
+// ─── COUPON DATA ───────────────────────────────────────────────────────────
 const COUPONS = [{"id":"23MS111_2198","code":"2198","name":"Shiba","roll":"23MS111","phone":"9668753919","food":"Non Veg"},{"id":"24MS076_621795","code":"621795","name":"Agnija Basu","roll":"24MS076","phone":"8942857513","food":"Non Veg"},{"id":"21MS166_157868","code":"157868","name":"Shibashis Mukhopadhyay","roll":"21MS166","phone":"8918102423","food":"Non Veg"},{"id":"25MS150_188188","code":"188188","name":"Aaditya","roll":"25MS150","phone":"8180042379","food":"Veg"},{"id":"25MS071_713280","code":"713280","name":"Sisriksha","roll":"25MS071","phone":"9674992296","food":"Veg"},{"id":"25MS260_785629","code":"785629","name":"Soham Akhouri","roll":"25MS260","phone":"8084550045","food":"Veg"},{"id":"25MS250_696869","code":"696869","name":"Ayush Sharma","roll":"25MS250","phone":"9818449360","food":"Veg"},{"id":"25RS017_443545","code":"443545","name":"Soumya Chattopadhyay","roll":"25RS017","phone":"7431946854","food":"Non Veg"},{"id":"25MS247_599953","code":"599953","name":"Neil Joshi","roll":"25MS247","phone":"9455512777","food":"Veg"},{"id":"25MS301_245979","code":"245979","name":"Ayush Kushwaha","roll":"25MS301","phone":"8602180459","food":"Veg"},{"id":"25MS318_772041","code":"772041","name":"Kaushik Gogoi","roll":"25MS318","phone":"8453421063","food":"Non Veg"},{"id":"25MS007_593371","code":"593371","name":"Niranjan K","roll":"25MS007","phone":"7356309609","food":"Veg"},{"id":"25MS003_984512","code":"984512","name":"Navaneeth Krishnan","roll":"25MS003","phone":"9447105082","food":"Non Veg"},{"id":"25MS206_878414","code":"878414","name":"Syam Pranav N","roll":"25MS206","phone":"9496719398","food":"Veg"},{"id":"21RS009_116210","code":"116210","name":"Anwesha ghosh","roll":"21RS009","phone":"8927607730","food":"Non Veg"},{"id":"23MS225_178748","code":"178748","name":"Krishna Tiwari","roll":"23MS225","phone":"9625868250","food":"Veg"},{"id":"23MS106_860127","code":"860127","name":"Tanmay Raj","roll":"23MS106","phone":"6203858729","food":"Veg"},{"id":"25MS212_226785","code":"226785","name":"Kumar Abhinav","roll":"25MS212","phone":"7294004935","food":"Veg"},{"id":"25MS210_522294","code":"522294","name":"Aaron Crasto Vinod","roll":"25MS210","phone":"96534 44126","food":"Non Veg"},{"id":"25MS209_534662","code":"534662","name":"Prashant Singh Rajput","roll":"25MS209","phone":"8953501959","food":"Non Veg"},{"id":"25MS221_907317","code":"907317","name":"Vaidyanath ravindran","roll":"25MS221","phone":"9490146750","food":"Veg"},{"id":"25MS179_284924","code":"284924","name":"Indrashis Gangopadhyay","roll":"25MS179","phone":"9330789909","food":"Non Veg"},{"id":"25MS144_169958","code":"169958","name":"Bikash Kumar","roll":"25MS144","phone":"9102787664","food":"Veg"},{"id":"25MS275_803488","code":"803488","name":"Antardipan Mukhopadhyay","roll":"25MS275","phone":"6295543088","food":"Non Veg"},{"id":"25MS137_834589","code":"834589","name":"Latesh Patil","roll":"25MS137","phone":"9175890506","food":"Non Veg"},{"id":"25MS141_740146","code":"740146","name":"Amitesh Singh","roll":"25MS141","phone":"7651871427","food":"Veg"},{"id":"25MS152_507550","code":"507550","name":"Ayurup Bagchi","roll":"25MS152","phone":"7001654959","food":"Non Veg"},{"id":"25MS106_673294","code":"673294","name":"Anubhab sarkar","roll":"25MS106","phone":"9239077370","food":"Non Veg"},{"id":"25MS026_390434","code":"390434","name":"Shiikhar Chandra","roll":"25MS026","phone":"9073475533","food":"Non Veg"},{"id":"25MS093_712319","code":"712319","name":"Sudarsan Mondol","roll":"25MS093","phone":"9531562329","food":"Non Veg"},{"id":"25MS111_184722","code":"184722","name":"Debanjan Sen","roll":"25MS111","phone":"865307188","food":"Non Veg"},{"id":"24MS113_589012","code":"589012","name":"Shuvadip moulik","roll":"24MS113","phone":"9531041637","food":"Non Veg"},{"id":"25MS237_069382","code":"069382","name":"Fazil M","roll":"25MS237","phone":"9449931761","food":"Non Veg"},{"id":"25MS231_116478","code":"116478","name":"HD","roll":"25MS231","phone":"9612604266","food":"Non Veg"},{"id":"25MS243_202949","code":"202949","name":"Rishabh Yadav","roll":"25MS243","phone":"9919937221","food":"Veg"},{"id":"25MS298_077201","code":"077201","name":"Swapnendu Kundu","roll":"25MS298","phone":"9726453882","food":"Veg"},{"id":"25MS304_785545","code":"785545","name":"Krishna Gopal","roll":"25MS304","phone":"8250578371","food":"Non Veg"},{"id":"25MS303_435899","code":"435899","name":"Dishant","roll":"25MS303","phone":"9911318829","food":"Veg"},{"id":"25MS079_009833","code":"009833","name":"Rudranil Choudhury","roll":"25MS079","phone":"7044125747","food":"Veg"},{"id":"25MS065_949872","code":"949872","name":"SK Taushif Ali","roll":"25MS065","phone":"6292018717","food":"Veg"},{"id":"25MS062_886132","code":"886132","name":"Pola Aarya Mayankkumar","roll":"25MS062","phone":"8980788733","food":"Veg"},{"id":"25MS215_215592","code":"215592","name":"Koishik Biswas","roll":"25MS215","phone":"9734393464","food":"Non Veg"},{"id":"25MS048_783949","code":"783949","name":"Pratham B Sarma","roll":"25MS048","phone":"9954971648","food":"Non Veg"},{"id":"25MS138_103282","code":"103282","name":"Riddhi Biswas","roll":"25MS138","phone":"9073999404","food":"Non Veg"},{"id":"25MS170_540588","code":"540588","name":"Vinamra Gupta","roll":"25MS170","phone":"8920535206","food":"Veg"},{"id":"25MS163_291165","code":"291165","name":"Ankita santikari","roll":"25MS163","phone":"9339144458","food":"Non Veg"},{"id":"20RS107_994249","code":"994249","name":"Sautrik Bhattacharya","roll":"20RS107","phone":"9674678418","food":"Non Veg"},{"id":"25MS322_167295","code":"167295","name":"Antriksh","roll":"25MS322","phone":"9759155133","food":"Veg"},{"id":"25MS123_665407","code":"665407","name":"Vinayak prabhu","roll":"25MS123","phone":"8340772603","food":"Veg"},{"id":"24MS200_919773","code":"919773","name":"Avneesh Rana","roll":"24MS200","phone":"9119781724","food":"Non Veg"},{"id":"25MS277_490155","code":"490155","name":"Ipshit chakraborty","roll":"25MS277","phone":"9474957157","food":"Non Veg"},{"id":"21MS086_601790","code":"601790","name":"Abhay Saxena","roll":"21MS086","phone":"8851932898","food":"Non Veg"},{"id":"22MS040_498029","code":"498029","name":"Navonila Karmakar","roll":"22MS040","phone":"7001407912","food":"Non Veg"},{"id":"22MS123_224030","code":"224030","name":"Sampriti Mandal","roll":"22MS123","phone":"7477852752","food":"Non Veg"},{"id":"22RS091_803851","code":"803851","name":"Bedangshu","roll":"22RS091","phone":"6291332787","food":"Veg"},{"id":"25MS042_822417","code":"822417","name":"Devanathan Venugopal","roll":"25MS042","phone":"8341352498","food":"Veg"},{"id":"25MS109_305522","code":"305522","name":"Keyur Jain","roll":"25MS109","phone":"8209670130","food":"Veg"},{"id":"25MS020_981732","code":"981732","name":"MD. Shayan Bari","roll":"25MS020","phone":"8252397889","food":"Veg"},{"id":"25MS188_640584","code":"640584","name":"Achyut Boruah","roll":"25MS188","phone":"9395912003","food":"Non Veg"},{"id":"25MS196_384780","code":"384780","name":"Pratik Kumbhalkar","roll":"25MS196","phone":"8236096324","food":"Non Veg"},{"id":"21IP003_681609","code":"681609","name":"Arka","roll":"21IP003","phone":"7003557548","food":"Non Veg"},{"id":"24MS024_100807","code":"100807","name":"Eklavya Raman","roll":"24MS024","phone":"9560040793","food":"Non Veg"},{"id":"25MS010_890301","code":"890301","name":"Shruti chakraborty","roll":"25MS010","phone":"9836758558","food":"Non Veg"},{"id":"25MS246_709922","code":"709922","name":"Balamurugan P","roll":"25MS246","phone":"8072992928","food":"Veg"},{"id":"25MS168_586618","code":"586618","name":"Upasya Pradhan","roll":"25MS168","phone":"8293470507","food":"Non Veg"},{"id":"25MS110_504408","code":"504408","name":"Soham Choudhury","roll":"25MS110","phone":"8584015899","food":"Non Veg"},{"id":"25MS108_632699","code":"632699","name":"Manas Pratim Mondal","roll":"25MS108","phone":"7810959983","food":"Non Veg"},{"id":"25MS159_469778","code":"469778","name":"Pratyush Raj","roll":"25MS159","phone":"9472924392","food":"Veg"},{"id":"25MS133_697580","code":"697580","name":"Ayushman Samanta","roll":"25MS133","phone":"6291392362","food":"Non Veg"},{"id":"25MS035_129640","code":"129640","name":"Shrijita Ghorai","roll":"25MS035","phone":"7865897236","food":"Veg"},{"id":"25MS011_700916","code":"700916","name":"Debdatta Dam","roll":"25MS011","phone":"7439021789","food":"Veg"},{"id":"25MS014_314976","code":"314976","name":"Dipangshu Kalita","roll":"25MS014","phone":"6002153655","food":"Veg"},{"id":"24MS187_493358","code":"493358","name":"Peshane S","roll":"24MS187","phone":"8778071706","food":"Veg"},{"id":"25RS096_1099","code":"1099","name":"Sourav Chandra","roll":"25RS096","phone":"9883382176","food":"Non Veg"},{"id":"22RS090_9090","code":"9090","name":"Braja Kishor","roll":"22RS090","phone":"9090598443","food":"Both"},{"id":"24MP021_9090","code":"9090","name":"Padmanabha","roll":"24MP021","phone":"09090598443","food":"Both"},{"id":"25MS105_578861","code":"578861","name":"Shashikanta Roy","roll":"25MS105","phone":"7866080426","food":"Veg"},{"id":"22RS007_998624","code":"998624","name":"Aritri Saha","roll":"22RS007","phone":"609245998624","food":"Non Veg"},{"id":"25MS248_607774","code":"607774","name":"Ayush Singh","roll":"25MS248","phone":"9272160761","food":"Veg"},{"id":"25RS009_419663","code":"419663","name":"Joy Mandal","roll":"25RS009","phone":"8942801271","food":"Non Veg"},{"id":"25MS283_220848","code":"220848","name":"Utkarsh Gupta","roll":"25MS283","phone":"7379585288","food":"Veg"},{"id":"21IP029_995679","code":"995679","name":"Sarfraj Fency","roll":"21IP029","phone":"7750009174","food":"Non Veg"},{"id":"21IP001_775655","code":"775655","name":"Soumalya Debnath","roll":"21IP001","phone":"9564788163","food":"Non Veg"},{"id":"22RS109_015097","code":"015097","name":"Sourav Pal","roll":"22RS109","phone":"7364054490","food":"Non Veg"},{"id":"25MS280_978027","code":"978027","name":"Abhinav S Nair","roll":"25MS280","phone":"9739696262","food":"Non Veg"},{"id":"22MS163_072982","code":"072982","name":"Sayan Karmakar","roll":"22MS163","phone":"6290045978","food":"Non Veg"},{"id":"25RS091_931295","code":"931295","name":"Sagnik Roy","roll":"25RS091","phone":"8001069962","food":"Non Veg"},{"id":"25MS005_298584","code":"298584","name":"Utkarsh kumar Tiwari","roll":"25MS005","phone":"8881029621","food":"Veg"},{"id":"25MS255_999083","code":"999083","name":"Vihan Chrungoo","roll":"25MS255","phone":"8261000747","food":"Veg"},{"id":"25MS222_688188","code":"688188","name":"Utkarsh Singh","roll":"25MS222","phone":"9956742922","food":"Veg"},{"id":"23RS058_165361","code":"165361","name":"Sujay Dewan","roll":"23RS058","phone":"7478213066","food":"Non Veg"},{"id":"25MS018_179529","code":"179529","name":"Susha M","roll":"25MS018","phone":"7673923463","food":"Non Veg"},{"id":"25MS312_323987","code":"323987","name":"Rahul Beniwal","roll":"25MS312","phone":"9251093454","food":"Veg"},{"id":"25MS174_808810","code":"808810","name":"Naman Prasad","roll":"25MS174","phone":"9934739013","food":"Veg"},{"id":"22MS194_376705","code":"376705","name":"Dhruba Sinha","roll":"22MS194","phone":"8250023586","food":"Non Veg"},{"id":"25MS081_541761","code":"541761","name":"Parijat Kashyap","roll":"25MS081","phone":"7000078356","food":"Veg"},{"id":"25MS257_869233","code":"869233","name":"Chetan","roll":"25MS257","phone":"9492443937","food":"Veg"},{"id":"25MS001_092711","code":"092711","name":"Ainesh","roll":"25MS001","phone":"7075053611","food":"Veg"},{"id":"25MS132_066416","code":"066416","name":"Tanmay Khirwal","roll":"25MS132","phone":"9798113488","food":"Non Veg"},{"id":"25MS140_451759","code":"451759","name":"Subharthi Pramanik","roll":"25MS140","phone":"7699599380","food":"Non Veg"},{"id":"25MS002_651721","code":"651721","name":"Uditansh Gupta","roll":"25MS002","phone":"7380430340","food":"Veg"},{"id":"25MS012_841092","code":"841092","name":"Anuranjak Das","roll":"25MS012","phone":"9748933372","food":"Non Veg"},{"id":"25MS047_091669","code":"091669","name":"Alok jha","roll":"25MS047","phone":"9654404724","food":"Non Veg"},{"id":"25MS022_304822","code":"304822","name":"Sidharth Bansal","roll":"25MS022","phone":"8368006394","food":"Non Veg"},{"id":"25MS143_099069","code":"099069","name":"Soumyajit Das","roll":"25MS143","phone":"9330567745","food":"Non Veg"},{"id":"25MS061_360378","code":"360378","name":"Nitin Kumar","roll":"25MS061","phone":"8092927988","food":"Non Veg"},{"id":"25MS307_401565","code":"401565","name":"Kunal Thakur","roll":"25MS307","phone":"9899414086","food":"Non Veg"},{"id":"25MS096_542453","code":"542453","name":"Prajwal Ingale","roll":"25MS096","phone":"8767590554","food":"Non Veg"},{"id":"25MS139_029768","code":"029768","name":"Adhiraj Ray","roll":"25MS139","phone":"7980151180","food":"Veg"},{"id":"25MS082_447783","code":"447783","name":"Subhasree","roll":"25MS082","phone":"94346 31511","food":"Non Veg"},{"id":"25MS316_550616","code":"550616","name":"Renny Santosh","roll":"25MS316","phone":"8978644489","food":"Non Veg"},{"id":"21MS218_731933","code":"731933","name":"Zakia Huma","roll":"21MS218","phone":"9122434713","food":"Veg"},{"id":"24RS040_424906","code":"424906","name":"Swasrita Kundu","roll":"24RS040","phone":"9593072892","food":"Non Veg"},{"id":"25MS211_354228","code":"354228","name":"Aniket Y","roll":"25MS211","phone":"8450999316","food":"Non Veg"},{"id":"25MS154_839977","code":"839977","name":"K. Bhagvan","roll":"25MS154","phone":"9392721481","food":"Veg"},{"id":"25MS107_693059","code":"693059","name":"Mandeep Mochi","roll":"25MS107","phone":"7424836404","food":"Non Veg"},{"id":"24MS131_082631","code":"082631","name":"Bhatraju Sree Sairam","roll":"24MS131","phone":"8688012579","food":"Veg"},{"id":"25MS155_032689","code":"032689","name":"Nazia","roll":"25MS155","phone":"9365406966","food":"Veg"},{"id":"25MS148_081382","code":"081382","name":"Preethi","roll":"25MS148","phone":"7708808085","food":"Veg"},{"id":"25MS324_417146","code":"417146","name":"Samidha Nagose","roll":"25MS324","phone":"8329890468","food":"Non Veg"},{"id":"25MS160_553333","code":"553333","name":"Riya","roll":"25MS160","phone":"7015647056","food":"Veg"},{"id":"23MS028_757894","code":"757894","name":"Santosh","roll":"23MS028","phone":"9876543210","food":"Veg"},{"id":"25MS267_306839","code":"306839","name":"Aditya Tripathy","roll":"25MS267","phone":"7066920996","food":"Veg"},{"id":"21MS163_010864","code":"010864","name":"Arka deep dey","roll":"21MS163","phone":"9101653062","food":"Non Veg"},{"id":"25MS261_268093","code":"268093","name":"Ayush","roll":"25MS261","phone":"8467003203","food":"Veg"},{"id":"21MS234_027678","code":"027678","name":"Shreya Mukherjee","roll":"21MS234","phone":"62050w8174","food":"Non Veg"},{"id":"25MS309_088751","code":"088751","name":"Riyah Mohan","roll":"25MS309","phone":"9113997989","food":"Both"},{"id":"25MS135_504836","code":"504836","name":"Souparno","roll":"25MS135","phone":"8116555767","food":"Veg"},{"id":"24MS221_916607","code":"916607","name":"Swarali","roll":"24MS221","phone":"7397857575","food":"Veg"},{"id":"23MS199_707646","code":"707646","name":"Sattwik","roll":"23MS199","phone":"6290024359","food":"Non Veg"},{"id":"24MS223_758173","code":"758173","name":"Sahil Singh","roll":"24MS223","phone":"9311472520","food":"Non Veg"},{"id":"25MS278_135100","code":"135100","name":"Prashasti thapliyal","roll":"25MS278","phone":"9810219051","food":"Veg"},{"id":"25MS279_919223","code":"919223","name":"Vraddhi Chaurasiya","roll":"25MS279","phone":"8756025336","food":"Veg"},{"id":"25MS173_890998","code":"890998","name":"Vipra Shree","roll":"25MS173","phone":"9475362919","food":"Veg"},{"id":"25MS252_138573","code":"138573","name":"Kathamrita Kshetri","roll":"25MS252","phone":"9101326771","food":"Non Veg"},{"id":"NVRAY_435012","code":"435012","name":"Navneet Ray","roll":"NVRAY","phone":"9348756560","food":"Veg"},{"id":"852_808225","code":"808225","name":"Digamber Sahu","roll":"852","phone":"62635571879","food":"Non Veg"},{"id":"1516_512697","code":"512697","name":"Priyanshu Priyadarshi Dutta","roll":"1516","phone":"7787088888","food":"Non Veg"},{"id":"21MS120_758507","code":"758507","name":"VishalRaam C.S.","roll":"21MS120","phone":"9363316665","food":"Non Veg"},{"id":"23RS096_303914","code":"303914","name":"Pratip","roll":"23RS096","phone":"9933667384","food":"Non Veg"},{"id":"25MS306_206403","code":"206403","name":"Jayaram Shetty Braganza","roll":"25MS306","phone":"7045640927","food":"Veg"},{"id":"22MS096_166702","code":"166702","name":"Rumen Pal","roll":"22MS096","phone":"8389834744","food":"Non Veg"},{"id":"21MS201_758897","code":"758897","name":"Apuroop Vaidyam","roll":"21MS201","phone":"7995212498","food":"Non Veg"},{"id":"25RS029_502598","code":"502598","name":"Arya mishra","roll":"25RS029","phone":"7679304865","food":"Veg"},{"id":"24RS123_0539","code":"0539","name":"Chiranjeeb","roll":"24RS123","phone":"8942962712","food":"Non Veg"},{"id":"23RS031_0539xy","code":"0539xy","name":"Janardan","roll":"23RS031","phone":"9064213299","food":"Non Veg"},{"id":"23RS012_0721","code":"0721","name":"Debadtita pariari","roll":"23RS012","phone":"8617050654","food":"Non Veg"},{"id":"25RS029_5889","code":"5889","name":"Arya mishra","roll":"25RS029","phone":"8825362217","food":"Non Veg"},{"id":"22MS090_1769x","code":"1769x","name":"Eldho mathew binoy","roll":"22MS090","phone":"7907520124","food":"Veg"},{"id":"24RS010_8095x","code":"8095x","name":"Ayush anuvab","roll":"24RS010","phone":"9348575093","food":"Veg"},{"id":"22MS206_6533","code":"6533","name":"Amrut phutane","roll":"22MS206","phone":"9579884558","food":"Veg"},{"id":"62_622782","code":"622782","name":"Anshuman Dash","roll":"62","phone":"9040904300","food":"Non Veg"},{"id":"10_651138","code":"651138","name":"Satyabrata Rout","roll":"10","phone":"7852983925","food":"Non Veg"},{"id":"2022S_236532","code":"236532","name":"Sourav kumar Behera","roll":"2022S","phone":"7679148227","food":"Non Veg"},{"id":"CB_199268","code":"199268","name":"Chinmaya Biswal","roll":"CB","phone":"9861763422","food":"Both"},{"id":"03_617337","code":"617337","name":"Ayushman Dutta","roll":"03","phone":"7735668893","food":"Non Veg"},{"id":"23MS021_8485","code":"8485","name":"Anushka Mishra","roll":"23MS021","phone":"+91 79085 32120","food":"Non Veg"},{"id":"SK04_019099","code":"019099","name":"Swapnasarit Khanda","roll":"SK04","phone":"8327737843","food":"Non Veg"},{"id":"BP9_572408","code":"572408","name":"Bhagabat Senapati","roll":"BP9","phone":"7848865103","food":"Both"},{"id":"AK4U_752411","code":"752411","name":"Asim Kumar","roll":"AK4U","phone":"9583088645","food":"Both"},{"id":"20RS094_118831","code":"118831","name":"Gourab Das","roll":"20RS094","phone":"8538064648","food":"Non Veg"},{"id":"25MS068_661678","code":"661678","name":"Sk Sahil Jaman","roll":"25MS068","phone":"9475344329","food":"Non Veg"},{"id":"25MS158_257909","code":"257909","name":"Lakhinandan pegu","roll":"25MS158","phone":"9395147201","food":"Non Veg"},{"id":"24MS144_851715","code":"851715","name":"Rituraj","roll":"24MS144","phone":"8984234253","food":"Non Veg"},{"id":"20RS111_637095","code":"637095","name":"Poulami Ghosh","roll":"20RS111","phone":"8981419491","food":"Non Veg"},{"id":"25MS121_236501","code":"236501","name":"Dipayan Rajak","roll":"25MS121","phone":"8918993147","food":"Non Veg"},{"id":"25MS124_729489","code":"729489","name":"Prasannajit Rabha","roll":"25MS124","phone":"8099597070","food":"Non Veg"},{"id":"25MS183_6750y","code":"6750y","name":"Harshwardhan","roll":"25MS183","phone":"8769634303","food":"Veg"},{"id":"25MS300_464139","code":"464139","name":"Avinash","roll":"25MS300","phone":"9703101107","food":"Non Veg"},{"id":"25MS317_2121","code":"2121","name":"Jahanavi","roll":"25MS317","phone":"9239680372","food":"Veg"},{"id":"22MS173_3700","code":"3700","name":"Shresth","roll":"22MS173","phone":"8098146632","food":"Veg"},{"id":"25MS323_7319y","code":"7319y","name":"Nikku Repswal","roll":"25MS323","phone":"8209996252","food":"Veg"},{"id":"21MS003_6193ab","code":"6193ab","name":"Raj Vikrant Brahma","roll":"21MS003","phone":"8457919048","food":"Non Veg"},{"id":"AB03_529235","code":"529235","name":"Abhilash Behera","roll":"AB03","phone":"9777147433","food":"Non Veg"},{"id":"24MS136_bcd627","code":"bcd627","name":"Sanjib Narzary","roll":"24MS136","phone":"8638437908","food":"Non Veg"},{"id":"25MS234_6326","code":"6326","name":"Ayush Verma","roll":"25MS234","phone":"7042894594","food":"Veg"},{"id":"23MS269_4956","code":"4956","name":"Kshtiz","roll":"23MS269","phone":"9057248247","food":"Veg"},{"id":"21MS035_89tr45","code":"89tr45","name":"Abhay","roll":"21MS035","phone":"9090598443","food":"Non Veg"},{"id":"21MS241_89rtf4","code":"89rtf4","name":"Niveditha E","roll":"21MS241","phone":"9090598443","food":"Non Veg"},{"id":"23RS099_6759OP","code":"6759OP","name":"Manoj","roll":"23RS099","phone":"832788","food":"Non Veg"},{"id":"22RS038_8457jk","code":"8457jk","name":"Debabrata Mondal","roll":"22RS038","phone":"8457919048","food":"Non Veg"},{"id":"25MS257_4444op","code":"4444op","name":"Chetan","roll":"25MS257","phone":"30477832","food":"Veg"},{"id":"630hio","code":"630hio","name":"Rajesh","roll":"","phone":"7000853412","food":"Non Veg"},{"id":"25MS192_121579","code":"121579","name":"Ch Maharshi","roll":"25MS192","phone":"9902530336","food":"Non Veg"},{"id":"23RS006_9093","code":"9093","name":"Kanika","roll":"23RS006","phone":"8101377248","food":"Non Veg"},{"id":"19RS108_64423a","code":"64423a","name":"Keya Mondal","roll":"19RS108","phone":"9733458431","food":"Non Veg"},{"id":"19RS053_64423b","code":"64423b","name":"Soumadip Das","roll":"19RS053","phone":"9733458431","food":"Non Veg"},{"id":"25MS100_6186ab","code":"6186ab","name":"Tripti kumari","roll":"25MS100","phone":"8436223201","food":"Veg"},{"id":"22MS027_Abc321","code":"Abc321","name":"Piyush","roll":"22MS027","phone":"9090598443","food":"Non Veg"},{"id":"22MS196_794877","code":"794877","name":"Kartik Murmu","roll":"22MS196","phone":"9572855679","food":"Veg"},{"id":"25MS103_1435hb","code":"1435hb","name":"Adya Bansal","roll":"25MS103","phone":"8457919048","food":"Veg"},{"id":"25MS034_598767","code":"598767","name":"Omkar","roll":"25MS034","phone":"9823787760","food":"Veg"},{"id":"23MS029_673258","code":"673258","name":"Ayush kumar","roll":"23MS029","phone":"8789909934","food":"Non Veg"},{"id":"22MS125_1251jn","code":"1251jn","name":"Jyoti Nayana Medhi","roll":"22MS125","phone":"8457919048","food":"Both"},{"id":"21MS209_4577pk","code":"4577pk","name":"Pushpit Kumar","roll":"21MS209","phone":"8260550251","food":"Veg"},{"id":"23MS219_986462","code":"986462","name":"Sukanya Chowdhury","roll":"23MS219","phone":"","food":"Non Veg"},{"id":"25MS085_156827","code":"156827","name":"Marvelllyne","roll":"25MS085","phone":"8415936637","food":"Veg"},{"id":"25MS116_1753hk","code":"1753hk","name":"Barkha Debbarma","roll":"25MS116","phone":"7629978264","food":"Non Veg"},{"id":"22MS226_3482ka","code":"3482ka","name":"Srushti","roll":"22MS226","phone":"8457919048","food":"Veg"},{"id":"25MS172_331403","code":"331403","name":"Laffi Kelcie Suichiang","roll":"25MS172","phone":"9362834593","food":"Non Veg"},{"id":"24MS099_561134","code":"561134","name":"Dipankar","roll":"24MS099","phone":"7638041144","food":"Non Veg"},{"id":"24MS240_7286hb","code":"7286hb","name":"Subiksha","roll":"24MS240","phone":"72826167272","food":"Veg"},{"id":"20RS077_2007la","code":"2007la","name":"Sujay Nandi","roll":"20RS077","phone":"8457919048","food":"Both"},{"id":"25MS101_570299","code":"570299","name":"Aagnik Mondal","roll":"25MS101","phone":"7908211412","food":"Non Veg"},{"id":"23MS179_1638gs","code":"1638gs","name":"Ashutosh Jha","roll":"23MS179","phone":"8457919048","food":"Non Veg"},{"id":"24MS189_728913","code":"728913","name":"Hruthik","roll":"24MS189","phone":"8096550528","food":"Non Veg"},{"id":"2005_243427","code":"243427","name":"Swaraj hota","roll":"2005","phone":"993720060","food":"Veg"},{"id":"24MS023_693979","code":"693979","name":"Ranil vikram","roll":"24MS023","phone":"8861985262","food":"Veg"},{"id":"24MS020_459947","code":"459947","name":"Diganta","roll":"24MS020","phone":"9547741787","food":"Non Veg"},{"id":"24MS074_291397","code":"291397","name":"Aman Raj","roll":"24MS074","phone":"6207482209","food":"Non Veg"},{"id":"24MS085_150568","code":"150568","name":"Sanskar Hazre","roll":"24MS085","phone":"9348976816","food":"Non Veg"},{"id":"24MS105_265159","code":"265159","name":"Hrithvik","roll":"24MS105","phone":"8707803898","food":"Veg"},{"id":"24MS137_016348","code":"016348","name":"Utkarsh","roll":"24MS137","phone":"7856040502","food":"Veg"},{"id":"24MS133_853588","code":"853588","name":"Ankit kumar pathak","roll":"24MS133","phone":"9142636027","food":"Veg"},{"id":"24MS212_566317","code":"566317","name":"Diddy","roll":"24MS212","phone":"7044483264","food":"Non Veg"},{"id":"25MS205_3508x","code":"3508x","name":"Sumi sonwal","roll":"25MS205","phone":"7099407687","food":"Non Veg"},{"id":"23MS039_4561hh","code":"4561hh","name":"Soumalya Bera","roll":"23MS039","phone":"+91 83890 08716","food":"Non Veg"},{"id":"25RS007_866373","code":"866373","name":"TAPASWI SAIKIA","roll":"25RS007","phone":"9707511135","food":"Non Veg"},{"id":"25RS010_120492","code":"120492","name":"SURYATAPA SAHA","roll":"25RS010","phone":"8918072051","food":"Non Veg"},{"id":"25MS017_158093","code":"158093","name":"Dakshath P. Gowda","roll":"25MS017","phone":"8904743762","food":"Both"},{"id":"24MS120_7865gm","code":"7865gm","name":"Sheikh Gufran","roll":"24MS120","phone":"82792827717","food":"Veg"},{"id":"HAJA_715jaj","code":"715jaj","name":"Raman","roll":"HAJA","phone":"71817","food":"Non Veg"},{"id":"UQU_ahet61","code":"ahet61","name":"Roebuck balaji","roll":"UQU","phone":"72727","food":"Veg"},{"id":"UQUQ_857hab","code":"857hab","name":"Ashish pal","roll":"UQUQ","phone":"88181","food":"Veg"},{"id":"YWUQU_682861","code":"682861","name":"Arkaprovo Pramanik","roll":"YWUQU","phone":"8457","food":"Non Veg"},{"id":"752_057042","code":"057042","name":"MIRZA SADDAM","roll":"752","phone":"8982435388","food":"Non Veg"},{"id":"25MS055_348993","code":"348993","name":"Snigdho Biswas","roll":"25MS055","phone":"8100109448","food":"Non Veg"},{"id":"22RS032_Haj527","code":"Haj527","name":"Kingshuk patra","roll":"22RS032","phone":"727166","food":"Non Veg"},{"id":"23RS032_jaj101","code":"jaj101","name":"Kingshuk patra","roll":"23RS032","phone":"6287226","food":"Non Veg"},{"id":"21RS102_715uwi","code":"715uwi","name":"Sanajit maiti","roll":"21RS102","phone":"7281818","food":"Non Veg"},{"id":"18RS044_qu5716","code":"qu5716","name":"Dwaipayan pal","roll":"18RS044","phone":"6282818","food":"Non Veg"},{"id":"24MP005_751uiq","code":"751uiq","name":"Akash patra","roll":"24MP005","phone":"7281818","food":"Non Veg"},{"id":"21RS008_47tuwi","code":"47tuwi","name":"Monosij Nandy","roll":"21RS008","phone":"6272828","food":"Non Veg"},{"id":"21MS102_Yij90","code":"Yij90","name":"Sagnik Datta","roll":"21MS102","phone":"689","food":"Non Veg"},{"id":"22RS112_mmhagg","code":"mmhagg","name":"Souvik biswas","roll":"22RS112","phone":"8282882","food":"Non Veg"},{"id":"SN21IP007@IISERKOL.AC.IN_iau526","code":"iau526","name":"Suman Noskar","roll":"SN21IP007@IISERKOL.AC.IN","phone":"6272727","food":"Non Veg"},{"id":"24MP018_69jh","code":"69jh","name":"Anirban Mandal","roll":"24MP018","phone":"6890","food":"Non Veg"},{"id":"22RS078_679hhh","code":"679hhh","name":"Moumita Majhi","roll":"22RS078","phone":"6880","food":"Non Veg"},{"id":"22RS039_aja661","code":"aja661","name":"Abhishek","roll":"22RS039","phone":"6282828","food":"Non Veg"},{"id":"SS23RS055_iha164","code":"iha164","name":"Sreyashi","roll":"SS23RS055","phone":"71818","food":"Non Veg"},{"id":"24RS127_579hb","code":"579hb","name":"Suman Pramanik","roll":"24RS127","phone":"56890","food":"Non Veg"},{"id":"uuq165","code":"uuq165","name":"Manas","roll":"","phone":"7282828","food":"Non Veg"},{"id":"25RS059_50625a","code":"50625a","name":"Ananya","roll":"25RS059","phone":"7076316381","food":"Non Veg"},{"id":"20RS147_50625b","code":"50625b","name":"Ammu J K","roll":"20RS147","phone":"9051417643","food":"Non Veg"},{"id":"22RS097_gye577","code":"gye577","name":"Sourav","roll":"22RS097","phone":"578754","food":"Non Veg"},{"id":"24RS014_f61781","code":"f61781","name":"Sujon mondal","roll":"24RS014","phone":"8191817","food":"Non Veg"},{"id":"19IP003_410865","code":"410865","name":"Vivek","roll":"19IP003","phone":"8593075185","food":"Non Veg"},{"id":"23RS100_411545","code":"411545","name":"leya","roll":"23RS100","phone":"9995086087","food":"Non Veg"},{"id":"21MS087_utr467","code":"utr467","name":"Mubeen","roll":"21MS087","phone":"785433","food":"Non Veg"},{"id":"24RS122_0hryzz","code":"0hryzz","name":"Suparna Sarkar","roll":"24RS122","phone":"4678","food":"Non Veg"},{"id":"22RS008_174384","code":"174384","name":"Madhu Kumari","roll":"22RS008","phone":"9051637019","food":"Non Veg"},{"id":"21RS035_568xcv","code":"568xcv","name":"Subhra Sil","roll":"21RS035","phone":"46890","food":"Non Veg"},{"id":"25MS066_659669","code":"659669","name":"Aayush Patil","roll":"25MS066","phone":"9596935555","food":"Veg"},{"id":"JRF_659106","code":"659106","name":"G Manikantha","roll":"JRF","phone":"8260497201","food":"Non Veg"},{"id":"24RS_699946","code":"699946","name":"Subham Sahu","roll":"24RS","phone":"7384438855","food":"Non Veg"},{"id":"22RS099_uib863","code":"uib863","name":"Suman Das","roll":"22RS099","phone":"+91 96794 67531","food":"Non Veg"},{"id":"236532","code":"236532","name":"Sourav Kumar Behera","roll":"","phone":"7679148227","food":"Non Veg"},{"id":"25RS005_936044","code":"936044","name":"Debanu bandyopadhyay","roll":"25RS005","phone":"9339031097","food":"Non Veg"},{"id":"22RS014_384310","code":"384310","name":"Bishal Hazra","roll":"22RS014","phone":"7865803866","food":"Non Veg"},{"id":"WEYG_tyfsww","code":"tyfsww","name":"Asim Kumar Panda","roll":"WEYG","phone":"+91 75508 26653","food":"Non Veg"},{"id":"24MS193_485799","code":"485799","name":"Shubangi Sarkar","roll":"24MS193","phone":"+91 96672 32585","food":"Non Veg"},{"id":"23MS238_594946","code":"594946","name":"Subhajit acharya","roll":"23MS238","phone":"8777710597","food":"Non Veg"},{"id":"2ND TIME_qi6161","code":"qi6161","name":"Debanu bandyopadhyay","roll":"2ND TIME","phone":"62727","food":"Non Veg"},{"id":"2ND_iq6171","code":"iq6171","name":"Bishal Hazra","roll":"2ND","phone":"7865803866","food":"Non Veg"},{"id":"2ND_uq6272","code":"uq6272","name":"Asim Kumar Panda","roll":"2ND","phone":"+91 75508 26653","food":"Non Veg"},{"id":"2ND_qow167","code":"qow167","name":"Shubangi Sarkar","roll":"2ND","phone":"+91 96672 32585","food":"Non Veg"},{"id":"19RS114_150392","code":"150392","name":"Akhilesh jaiswar","roll":"19RS114","phone":"7738422400","food":"Non Veg"},{"id":"2ND_q17885","code":"q17885","name":"Subhajit acharya","roll":"2ND","phone":"8777710597","food":"Non Veg"},{"id":"25MS155_q52818","code":"q52818","name":"Nazia","roll":"25MS155","phone":"Ywiwit","food":"Veg"},{"id":"21IP033_570640","code":"570640","name":"Ankita Choudhary","roll":"21IP033","phone":"9079972296","food":"Veg"},{"id":"24MS143_353679","code":"353679","name":"Asmi Mhatre","roll":"24MS143","phone":"9321793634","food":"Veg"},{"id":"MH20RS014@IISERKOL.AC.IN_wu8714","code":"wu8714","name":"Monjuri Hembram","roll":"MH20RS014@IISERKOL.AC.IN","phone":"1863519","food":"Non Veg"},{"id":"24RS059_597808","code":"597808","name":"Arijit Patra","roll":"24RS059","phone":"8260406106","food":"Non Veg"},{"id":"24MS129_159650","code":"159650","name":"Anshika yadav","roll":"24MS129","phone":"9799737303","food":"Veg"},{"id":"22RS048_958722","code":"958722","name":"Pranay mondal","roll":"22RS048","phone":"8637800837","food":"Non Veg"},{"id":"20IP011_662737","code":"662737","name":"Soumajit","roll":"20IP011","phone":"7001946909","food":"Non Veg"},{"id":"21MS164_994941","code":"994941","name":"Sayanho biswas","roll":"21MS164","phone":"+919051318487","food":"Non Veg"},{"id":"22RS027_402988","code":"402988","name":"Subham","roll":"22RS027","phone":"9933064264","food":"Non Veg"},{"id":"21MS133_731441","code":"731441","name":"Deepshikha singh","roll":"21MS133","phone":"+919236813523","food":"Veg"},{"id":"21MS236_399445","code":"399445","name":"Sarthak","roll":"21MS236","phone":"9408123600","food":"Veg"},{"id":"22RS013_168922","code":"168922","name":"Athul p","roll":"22RS013","phone":"9961173214","food":"Non Veg"},{"id":"25RS064_566144","code":"566144","name":"Pratik","roll":"25RS064","phone":"9435015190","food":"Non Veg"},{"id":"24MP026_wu6285","code":"wu6285","name":"Swagata","roll":"24MP026","phone":"7171515","food":"Non Veg"},{"id":"YEIW_60ywi7","code":"60ywi7","name":"Ashok","roll":"YEIW","phone":"7894554794","food":"Non Veg"},{"id":"24IP010_897780","code":"897780","name":"Arkadip Nandan","roll":"24IP010","phone":"7980326790","food":"Non Veg"},{"id":"24IP010_902783","code":"902783","name":"Soham pal","roll":"24IP010","phone":"7980326790","food":"Non Veg"},{"id":"24MS026_7865","code":"7865","name":"Mohammad Sufiyan","roll":"24MS026","phone":"9509910892","food":"Non Veg"},{"id":"24MS121_309678","code":"309678","name":"Harsh Raj","roll":"24MS121","phone":"8102980248","food":"Veg"},{"id":"23MS047_1413","code":"1413","name":"Arjun K","roll":"23MS047","phone":"8658084466","food":"Non Veg"},{"id":"24MS150_763476","code":"763476","name":"Zinedine","roll":"24MS150","phone":"+91 70034 15765","food":"Veg"},{"id":"22MS072_706020","code":"706020","name":"Niravra Nag","roll":"22MS072","phone":"8697345673","food":"Veg"},{"id":"22MS001_375677","code":"375677","name":"Swapnanil sur","roll":"22MS001","phone":"9477549804","food":"Non Veg"},{"id":"22MS152_284255","code":"284255","name":"Subham Biswas","roll":"22MS152","phone":"7029497277","food":"Non Veg"},{"id":"22MS140_855509","code":"855509","name":"Pritam Sadhu","roll":"22MS140","phone":"Ph","food":"Non Veg"},{"id":"23MS270_750296","code":"750296","name":"Aditya Brahmabhat","roll":"23MS270","phone":"Phone","food":"Veg"},{"id":"21MS124_616919","code":"616919","name":"Harsh singh","roll":"21MS124","phone":"Ph","food":"Non Veg"},{"id":"21MS229_703363","code":"703363","name":"Sankarshan Mondal","roll":"21MS229","phone":"Ph","food":"Non Veg"},{"id":"21MS204_635430","code":"635430","name":"Sattwamo Ghosh","roll":"21MS204","phone":"8240271643","food":"Non Veg"},{"id":"21IP013_contri","code":"contri","name":"Sparsh Sharma","roll":"21IP013","phone":"Contri","food":"Both"},{"id":"22MS047_665199","code":"665199","name":"Debanjan Sinha Mahapatra","roll":"22MS047","phone":"Ph","food":"Non Veg"},{"id":"23MS141_501588","code":"501588","name":"Divyanshu Saha","roll":"23MS141","phone":"Ph","food":"Veg"},{"id":"24RS133_423865","code":"423865","name":"Amarendra Kumar Verma","roll":"24RS133","phone":"8989722463","food":"Non Veg"},{"id":"18IP010_524140","code":"524140","name":"Gaurab Ghosh","roll":"18IP010","phone":"7687892242","food":"Non Veg"},{"id":"22RS062_307850","code":"307850","name":"Partha Protim Karmakar","roll":"22RS062","phone":"07044153457","food":"Non Veg"},{"id":"21MS235_452489","code":"452489","name":"Subrmani Mb","roll":"21MS235","phone":"9150194917","food":"Non Veg"},{"id":"25MS162_866362","code":"866362","name":"Sumona Maji","roll":"25MS162","phone":"8967688006","food":"Non Veg"},{"id":"24MS138_389207","code":"389207","name":"Shree Harsh","roll":"24MS138","phone":"6299142278","food":"Non Veg"},{"id":"25MS036_724854","code":"724854","name":"Bhavesh Yogesh Lawhale","roll":"25MS036","phone":"9689968107","food":"Non Veg"},{"id":"25MS177_525295","code":"525295","name":"Dixita Adhikaari","roll":"25MS177","phone":"8136021946","food":"Veg"},{"id":"25MS171_525295","code":"525295","name":"Dixita Adhikari","roll":"25MS171","phone":"8136021946","food":"Veg"},{"id":"25MS075_159816","code":"159816","name":"Arham Alam","roll":"25MS075","phone":"9051879873","food":"Non Veg"},{"id":"24MS107_455573","code":"455573","name":"Ashutosh","roll":"24MS107","phone":"7645933091","food":"Veg"},{"id":"POST DOC_632891","code":"632891","name":"Dhanapriya","roll":"POST DOC","phone":"Ph","food":"Non Veg"},{"id":"21MS127_1ms127","code":"1ms127","name":"Karthiayani Vijai","roll":"21MS127","phone":"9995056029","food":"Non Veg"},{"id":"21MS247_597786","code":"597786","name":"Nandita Narendar Gopalankutty","roll":"21MS247","phone":"8777697251","food":"Non Veg"},{"id":"22RS024_444928","code":"444928","name":"Diya Rabeendran","roll":"22RS024","phone":"Ph-","food":"Non Veg"},{"id":"21MS127_431949","code":"431949","name":"Karthiayani Vijai","roll":"21MS127","phone":"9995056029","food":"Non Veg"},{"id":"22MS056_248400","code":"248400","name":"Nayan","roll":"22MS056","phone":"Ph-","food":"Non Veg"},{"id":"24MP035_550807","code":"550807","name":"Sankita Modi","roll":"24MP035","phone":"Ph-","food":"Veg"},{"id":"24MP020_317923","code":"317923","name":"Barath Narayana T","roll":"24MP020","phone":"Ph-","food":"Veg"},{"id":"23MS051_059803","code":"059803","name":"Rohan Singha Deo","roll":"23MS051","phone":"Rs kejeiwg","food":"Both"},{"id":"23MS039_5718gg","code":"5718gg","name":"Soumalya Bera","roll":"23MS039","phone":"+91 83890 08716","food":"Non Veg"},{"id":"19IP024_816122","code":"816122","name":"Bhavya Pratap Singh","roll":"19IP024","phone":"9643011836","food":"Veg"},{"id":"19IP012_816122","code":"816122","name":"Sneha Sahu","roll":"19IP012","phone":"9643011836","food":"Veg"},{"id":"23IP_229785","code":"229785","name":"Soumyadeep Sarkar","roll":"23IP","phone":"7872351451","food":"Non Veg"},{"id":"20RS106_6583","code":"6583","name":"Prakash Biswas","roll":"20RS106","phone":"8442915844","food":"Non Veg"},{"id":"21RS091_404672","code":"404672","name":"Saurav Kumar Saha","roll":"21RS091","phone":"7003619720","food":"Non Veg"},{"id":"21RS042_458153","code":"458153","name":"Manasi Mallick","roll":"21RS042","phone":"8967880487","food":"Non Veg"},{"id":"21MS126_216042","code":"216042","name":"Jayati Sahu","roll":"21MS126","phone":"6290349115","food":"Non Veg"},{"id":"24RS023_3231","code":"3231","name":"Dipannita Ghosh Dastider","roll":"24RS023","phone":"9674481461","food":"Non Veg"},{"id":"24MP027_808871","code":"808871","name":"Ritika Bag","roll":"24MP027","phone":"6290399281","food":"Non Veg"},{"id":"22MS059_931521","code":"931521","name":"Youktik","roll":"22MS059","phone":"9330192230","food":"Non Veg"},{"id":"25MS142_592317","code":"592317","name":"Dibyayan Barui","roll":"25MS142","phone":"9330624205","food":"Non Veg"},{"id":"25MS054_772073","code":"772073","name":"Koustav Roy","roll":"25MS054","phone":"9832978212","food":"Non Veg"},{"id":"21RS064_017081","code":"017081","name":"Kritika Prasad","roll":"21RS064","phone":"9681644026","food":"Non Veg"},{"id":"23RS077_021515","code":"021515","name":"Prerana","roll":"23RS077","phone":"9432339710","food":"Non Veg"},{"id":"23MS153_256044","code":"256044","name":"Fahad Ali Khan","roll":"23MS153","phone":"9149052530","food":"Non Veg"},{"id":"20RS122_534435","code":"534435","name":"Sourav Sanyal","roll":"20RS122","phone":"7478430016","food":"Non Veg"},{"id":"22MS015_802570","code":"802570","name":"Sanghamitra Basu","roll":"22MS015","phone":"6290868309","food":"Veg"},{"id":"24IP007_9872","code":"9872","name":"Sayanika Biswas","roll":"24IP007","phone":"9883936110","food":"Non Veg"},{"id":"24RS025_118048","code":"118048","name":"Soumyajit Chakraborty","roll":"24RS025","phone":"8334880383","food":"Non Veg"},{"id":"24MS044_492195","code":"492195","name":"Meghith","roll":"24MS044","phone":"9487691391","food":"Veg"},{"id":"21RS042_776872","code":"776872","name":"Diptanil Saha","roll":"21RS042","phone":"6297274737","food":"Non Veg"},{"id":"25MS045_592734","code":"592734","name":"Soumyajit Dalal","roll":"25MS045","phone":"9830776354","food":"Non Veg"},{"id":"23RS098_727934","code":"727934","name":"Shirshendu Giri","roll":"23RS098","phone":"8972750119","food":"Non Veg"},{"id":"21MS183_633495","code":"633495","name":"Gautham S","roll":"21MS183","phone":"8129246268","food":"Non Veg"},{"id":"25MS165_884565","code":"884565","name":"Rishiraj Chatterjee","roll":"25MS165","phone":"8961831683","food":"Non Veg"},{"id":"23MS144_907107","code":"907107","name":"Hithesh Sumuni","roll":"23MS144","phone":"9380599807","food":"Veg"},{"id":"20RS140_527855","code":"527855","name":"Anushree","roll":"20RS140","phone":"7003944175","food":"Non Veg"},{"id":"21MS180_702584","code":"702584","name":"Oindrila Sarkar","roll":"21MS180","phone":"9643015158","food":"Veg"},{"id":"21MS242_090025","code":"090025","name":"Fathima anjun E C","roll":"21MS242","phone":"8590293248","food":"Veg"},{"id":"21RS052_437108","code":"437108","name":"Rishita singh","roll":"21RS052","phone":"9889661001","food":"Non Veg"},{"id":"23RS017_686123","code":"686123","name":"Suman Halder","roll":"23RS017","phone":"7477361905","food":"Veg"},{"id":"25RS028_991593","code":"991593","name":"SAGAR KUMAR BEHERA","roll":"25RS028","phone":"7735600891","food":"Both"},{"id":"20RS118_526074","code":"526074","name":"Arundhaty","roll":"20RS118","phone":"6291554048","food":"Non Veg"},{"id":"24RS042_459394","code":"459394","name":"Deepanjan Patra","roll":"24RS042","phone":"6289731394","food":"Non Veg"},{"id":"20RS045_405127","code":"405127","name":"Amrita Chakraborty","roll":"20RS045","phone":"8972754797","food":"Non Veg"},{"id":"22MS006_582929","code":"582929","name":"Ishika Patra","roll":"22MS006","phone":"7206083260","food":"Veg"},{"id":"25MS074_611274","code":"611274","name":"Swapnadeep Sil","roll":"25MS074","phone":"8777830188","food":"Non Veg"},{"id":"21MS058_136820","code":"136820","name":"Saurashis Sinha","roll":"21MS058","phone":"7063263756","food":"Non Veg"},{"id":"23MS161_332981","code":"332981","name":"Fahim Tausif","roll":"23MS161","phone":"7001399294","food":"Non Veg"},{"id":"22MS067_401779","code":"401779","name":"Basila Shahin K","roll":"22MS067","phone":"7012711626","food":"Non Veg"},{"id":"25RS061_444122","code":"444122","name":"Shraddha Biswas","roll":"25RS061","phone":"9339847760","food":"Non Veg"},{"id":"24RS021_551001","code":"551001","name":"Sourav Rans","roll":"24RS021","phone":"8967742860","food":"Non Veg"},{"id":"25MS161_530234","code":"530234","name":"Shreyi Bhattacharjee","roll":"25MS161","phone":"8240820360","food":"Non Veg"},{"id":"22MS135_5678ig","code":"5678ig","name":"Shamba Chakraborty","roll":"22MS135","phone":"+91 79085 32120","food":"Non Veg"},{"id":"-_re64ur","code":"re64ur","name":"Ritesh Pandey","roll":"-","phone":"+91 93484 58247","food":"Veg"},{"id":"UWUW_ki","code":"ki","name":"Shamba","roll":"UWUW","phone":"+91 79802 86771","food":"Non Veg"},{"id":"21MS045_381487","code":"381487","name":"Shubham Das","roll":"21MS045","phone":"9330427515","food":"Non Veg"},{"id":"IWUWY_w57ruq","code":"w57ruq","name":"Chiranjit Mahato","roll":"IWUWY","phone":"","food":"Non Veg"},{"id":"24MS138_998924","code":"998924","name":"Vihan","roll":"24MS138","phone":"8619249859","food":"Veg"},{"id":"24MS229_322461","code":"322461","name":"Mohit saini","roll":"24MS229","phone":"7740012417","food":"Veg"},{"id":"22MS070_1842","code":"1842","name":"Daijee","roll":"22MS070","phone":"6002016957","food":"Veg"},{"id":"BB2003_458413","code":"458413","name":"Barsha","roll":"BB2003","phone":"9777906391","food":"Non Veg"},{"id":"AK2022_698114","code":"698114","name":"Arpita","roll":"AK2022","phone":"8260773143","food":"Veg"},{"id":"PS2022_637142","code":"637142","name":"Priti","roll":"PS2022","phone":"9777104665","food":"Veg"},{"id":"SR_543695","code":"543695","name":"Situpriya","roll":"SR","phone":"7752068941","food":"Veg"},{"id":"SM123123_0911rm","code":"0911rm","name":"Subodh mishra","roll":"SM123123","phone":"63738929333","food":"Veg"},{"id":"21MS030_836050","code":"836050","name":"Theertha Babu","roll":"21MS030","phone":"Shusai","food":"Non Veg"},{"id":"24MS230_815232","code":"815232","name":"Rahil","roll":"24MS230","phone":"6300497708","food":"Non Veg"},{"id":"21IP013_No coupon....contri","code":"No coupon....contri","name":"Sparsh Sharma","roll":"21IP013","phone":"Contri","food":"Both"},{"id":"25MS069_118939","code":"118939","name":"Souhardya Pal","roll":"25MS069","phone":"9330498969","food":"Non Veg"},{"id":"24MS136_Abcd627","code":"Abcd627","name":"Sanjib Narzary","roll":"24MS136","phone":"8638437908","food":"Non Veg"},{"id":"0630hio","code":"0630hio","name":"Rajesh","roll":"","phone":"7000853412","food":"Non Veg"},{"id":"19RS108_964423","code":"964423","name":"Keya Mondal","roll":"19RS108","phone":"9733458431","food":"Non Veg"},{"id":"19RS053_964423","code":"964423","name":"Soumadip Das","roll":"19RS053","phone":"9733458431","food":"Non Veg"},{"id":"HAJA_2715jaj","code":"2715jaj","name":"Raman","roll":"HAJA","phone":"71817","food":"Non Veg"},{"id":"23RS032_Hwjaj101","code":"Hwjaj101","name":"Kingshuk patra","roll":"23RS032","phone":"6287226","food":"Non Veg"},{"id":"21RS102_6715uwi","code":"6715uwi","name":"Sanajit maiti","roll":"21RS102","phone":"7281818","food":"Non Veg"},{"id":"18RS044_Ioqu5716","code":"Ioqu5716","name":"Dwaipayan pal","roll":"18RS044","phone":"6282818","food":"Non Veg"},{"id":"24MP005_9751uiq","code":"9751uiq","name":"Akash patra","roll":"24MP005","phone":"7281818","food":"Non Veg"},{"id":"21RS008_65447tuwi","code":"65447tuwi","name":"Monosij Nandy","roll":"21RS008","phone":"6272828","food":"Non Veg"},{"id":"SN21IP007@IISERKOL.AC.IN_Yaiau526","code":"Yaiau526","name":"Suman Noskar","roll":"SN21IP007@IISERKOL.AC.IN","phone":"6272727","food":"Non Veg"},{"id":"22RS039_Hsjaja661","code":"Hsjaja661","name":"Abhishek","roll":"22RS039","phone":"6282828","food":"Non Veg"},{"id":"SS23RS055_Kaoaiha164","code":"Kaoaiha164","name":"Sreyashi","roll":"SS23RS055","phone":"71818","food":"Non Veg"},{"id":"Tquuq165","code":"Tquuq165","name":"Manas","roll":"","phone":"7282828","food":"Non Veg"},{"id":"25RS059_450625","code":"450625","name":"Ananya","roll":"25RS059","phone":"7076316381","food":"Non Veg"},{"id":"20RS147_450625","code":"450625","name":"Ammu J K","roll":"20RS147","phone":"9051417643","food":"Non Veg"},{"id":"22RS097_Nbgye577","code":"Nbgye577","name":"Sourav","roll":"22RS097","phone":"578754","food":"Non Veg"},{"id":"24RS014_Hagf61781","code":"Hagf61781","name":"Sujon mondal","roll":"24RS014","phone":"8191817","food":"Non Veg"},{"id":"21MS087_Uutr467","code":"Uutr467","name":"Mubeen","roll":"21MS087","phone":"785433","food":"Non Veg"},{"id":"24RS122_6800hryzz","code":"6800hryzz","name":"Suparna Sarkar","roll":"24RS122","phone":"4678","food":"Non Veg"},{"id":"22RS099_Tyuib863","code":"Tyuib863","name":"Suman Das","roll":"22RS099","phone":"+91 96794 67531","food":"Non Veg"},{"id":"WEYG_Qetyfsww","code":"Qetyfsww","name":"Asim Kumar Panda","roll":"WEYG","phone":"+91 75508 26653","food":"Non Veg"},{"id":"2ND TIME_Ywiqi6161","code":"Ywiqi6161","name":"Debanu bandyopadhyay","roll":"2ND TIME","phone":"62727","food":"Non Veg"},{"id":"2ND_Uwiq6171","code":"Uwiq6171","name":"Bishal Hazra","roll":"2ND","phone":"7865803866","food":"Non Veg"},{"id":"2ND_Ywiquq6272","code":"Ywiquq6272","name":"Asim Kumar Panda","roll":"2ND","phone":"+91 75508 26653","food":"Non Veg"},{"id":"2ND_Ywiqow167","code":"Ywiqow167","name":"Shubangi Sarkar","roll":"2ND","phone":"+91 96672 32585","food":"Non Veg"},{"id":"2ND_Uwiq17885","code":"Uwiq17885","name":"Subhajit acharya","roll":"2ND","phone":"8777710597","food":"Non Veg"},{"id":"MH20RS014@IISERKOL.AC.IN_Qtywu8714","code":"Qtywu8714","name":"Monjuri Hembram","roll":"MH20RS014@IISERKOL.AC.IN","phone":"1863519","food":"Non Veg"},{"id":"24MP026_Ywuwu6285","code":"Ywuwu6285","name":"Swagata","roll":"24MP026","phone":"7171515","food":"Non Veg"},{"id":"YEIW_Ywuw60ywi7","code":"Ywuw60ywi7","name":"Ashok","roll":"YEIW","phone":"7894554794","food":"Non Veg"},{"id":"21MS127_21ms127","code":"21ms127","name":"Karthiayani Vijai","roll":"21MS127","phone":"9995056029","food":"Non Veg"},{"id":"UWUW_Veg ki mkc","code":"Veg ki mkc","name":"Shamba","roll":"UWUW","phone":"+91 79802 86771","food":"Non Veg"},{"id":"IWUWY_Ywiw57ruq","code":"Ywiw57ruq","name":"Chiranjit Mahato","roll":"IWUWY","phone":"","food":"Non Veg"},{"id":"25MS257_444444","code":"444444","name":"Chetan","roll":"25MS257","phone":"30477832","food":"Veg"},{"id":"UQU_Kahet61","code":"Kahet61","name":"Roebuck balaji","roll":"UQU","phone":"72727","food":"Veg"},{"id":"UQUQ_71857hab","code":"71857hab","name":"Ashish pal","roll":"UQUQ","phone":"88181","food":"Veg"},{"id":"25MS155_Ywiq52818","code":"Ywiq52818","name":"Nazia","roll":"25MS155","phone":"Ywiwit","food":"Veg"},{"id":"-_Tyre64ur","code":"Tyre64ur","name":"Ritesh Pandey","roll":"-","phone":"+91 93484 58247","food":"Veg"}];
 
-// Build lookup maps
-const byId   = {};   // id -> coupon
-const byCode = {};   // code -> [coupons]  (may have dupes)
+const byId = {}, byCode = {};
 COUPONS.forEach(c => {
   byId[c.id] = c;
   if (!byCode[c.code]) byCode[c.code] = [];
   byCode[c.code].push(c);
 });
 
-// ─────────────────────────────────────────────────────────────────────────────
-// STATE — usedMap: { couponId: { at: timestamp, chosenFood: 'Veg'|'Non Veg' } }
-// Stored locally + synced via API backend
-// ─────────────────────────────────────────────────────────────────────────────
+// ─── STATE ────────────────────────────────────────────────────────────────
 const LS_KEY = 'iiser_kol_coupon_used_v2';
 let usedMap = {};
-let syncTimer = null;
 let currentCoupon = null;
 let selectedFood = null;
 let modalCouponId = null;
 let scanner = null;
-let syncOK = false;
+let scannerRunning = false;
 
-// ── Local Storage helpers ──
 function loadLocal() {
   try { usedMap = JSON.parse(localStorage.getItem(LS_KEY)) || {}; }
   catch { usedMap = {}; }
 }
-function saveLocal() {
-  localStorage.setItem(LS_KEY, JSON.stringify(usedMap));
+function saveLocal() { localStorage.setItem(LS_KEY, JSON.stringify(usedMap)); }
+
+// ─── CAMERA / SCANNER ─────────────────────────────────────────────────────
+function setStatus(msg, show = true) {
+  const el = document.getElementById('cam-status');
+  el.textContent = msg;
+  el.classList.toggle('show', show);
 }
 
-// ─────────────────────────────────────────────────────────────────────────────
-// SYNC via Anthropic API (Claude used as a JSON store)
-// We use a simple strategy: ask Claude to return the merged usedMap JSON.
-// The system prompt keeps the state. Each sync sends the full local state
-// and asks Claude to merge and return the authoritative combined state.
-// ─────────────────────────────────────────────────────────────────────────────
-const SYNC_KEY = 'iiser_kol_coupon_store_v2'; // namespace key
-let syncHistory = []; // conversation history for persistent state
-
-async function syncWithCloud() {
-  try {
-    setSyncDot('syncing');
-    const localState = JSON.stringify(usedMap);
-    
-    // Build message to send
-    const userMsg = `SYNC_REQUEST|key=${SYNC_KEY}|local=${localState}`;
-    
-    const body = {
-      model: "claude-sonnet-4-20250514",
-      max_tokens: 4096,
-      system: `You are a JSON state synchronization service for a coupon scanning system.
-Your ONLY job: maintain a persistent JSON object called the "usedMap" across calls.
-
-RULES:
-1. When you receive a SYNC_REQUEST message, merge the incoming local state with your stored state.
-2. Merging means: any coupon ID marked as used in EITHER the local OR stored state should remain used.
-3. Never remove a used coupon from the state (scans are permanent).
-4. Respond with ONLY the merged JSON object and nothing else. No explanation, no markdown, just raw JSON.
-5. The JSON is a flat object: { "couponId": { "at": "ISO timestamp", "chosenFood": "Veg or Non Veg" }, ... }
-
-Current stored state: ${JSON.stringify(usedMap)}`,
-      messages: [{ role: "user", content: userMsg }]
-    };
-
-    const res = await fetch("https://api.anthropic.com/v1/messages", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(body)
-    });
-    
-    if (!res.ok) throw new Error('API ' + res.status);
-    const data = await res.json();
-    const text = data.content.filter(b => b.type === 'text').map(b => b.text).join('');
-    
-    // Parse the returned merged state
-    const merged = JSON.parse(text.trim());
-    
-    // Merge locally
-    let changed = false;
-    Object.keys(merged).forEach(id => {
-      if (!usedMap[id]) {
-        usedMap[id] = merged[id];
-        changed = true;
-      }
-    });
-    
-    if (changed) {
-      saveLocal();
-      renderList();
-      updateAdmin();
-    }
-    
-    syncOK = true;
-    setSyncDot('ok');
-    document.getElementById('last-sync').textContent = new Date().toLocaleTimeString();
-    document.getElementById('sync-mode').textContent = 'Cloud Sync ✓';
-  } catch(e) {
-    console.warn('Sync failed:', e.message);
-    setSyncDot('err');
-    document.getElementById('sync-mode').textContent = 'Local Only (offline)';
-  }
-}
-
-function setSyncDot(state) {
-  const d = document.getElementById('sync-dot');
-  d.style.background = state === 'ok' ? '#4ade80' : state === 'syncing' ? '#fbbf24' : '#f87171';
-}
-
-async function forceSync() {
-  toast('Syncing…');
-  await syncWithCloud();
-  toast('Sync complete ✓');
-}
-
-// Auto-sync every 15 seconds
-function startAutoSync() {
-  syncWithCloud();
-  setInterval(syncWithCloud, 15000);
-}
-
-// ─────────────────────────────────────────────────────────────────────────────
-// QR SCANNER
-// ─────────────────────────────────────────────────────────────────────────────
 function startScanner() {
-  if (scanner) return;
-  resetScan();
+  // Show the reader div, hide the placeholder
+  document.getElementById('cam-placeholder').style.display = 'none';
+  document.getElementById('qr-reader').style.display = 'block';
+  setStatus('Starting camera…');
+
+  if (scanner) {
+    // already exists, just restart
+    scanner.start(
+      { facingMode: 'environment' },
+      { fps: 10, qrbox: { width: 260, height: 260 } },
+      onScan, () => {}
+    ).then(() => {
+      scannerRunning = true;
+      setStatus('Point camera at a QR code', true);
+      document.getElementById('cam-hint').textContent = '🟢 Camera active — hold steady';
+    }).catch(handleCamError);
+    return;
+  }
+
   scanner = new Html5Qrcode('qr-reader');
   scanner.start(
     { facingMode: 'environment' },
-    { fps: 10, qrbox: { width: Math.min(window.innerWidth - 60, 280), height: Math.min(window.innerWidth - 60, 280) } },
-    onScan,
-    () => {}
-  ).catch(() => {
-    document.getElementById('qr-reader').innerHTML =
-      '<p style="color:#fff;padding:30px;text-align:center;font-size:13px">Camera access denied.<br>Please allow camera and reload.</p>';
-  });
+    { fps: 10, qrbox: { width: 260, height: 260 } },
+    onScan, () => {}
+  ).then(() => {
+    scannerRunning = true;
+    setStatus('Point camera at a QR code', true);
+    document.getElementById('cam-hint').textContent = '🟢 Camera active — hold steady';
+    document.getElementById('hdr-sub').textContent = '420 coupons · camera active';
+  }).catch(handleCamError);
+}
+
+function handleCamError(err) {
+  scannerRunning = false;
+  const msg = String(err);
+  let userMsg = 'Camera error. ';
+  if (msg.includes('NotAllowed') || msg.includes('Permission')) {
+    userMsg = '❌ Camera permission denied. Please allow camera access in your browser settings, then refresh.';
+  } else if (msg.includes('NotFound') || msg.includes('Requested device not found')) {
+    userMsg = '❌ No camera found on this device.';
+  } else if (msg.includes('NotSupported') || msg.includes('https')) {
+    userMsg = '❌ Camera requires HTTPS. Open this page over https:// (e.g. GitHub Pages).';
+  } else {
+    userMsg = '❌ ' + msg;
+  }
+  document.getElementById('qr-reader').innerHTML =
+    `<div style="color:#ff8080;padding:24px 16px;font-size:13px;line-height:1.6;text-align:center">${userMsg}<br><br><button onclick="location.reload()" style="padding:8px 20px;border-radius:8px;border:none;background:#1a7a4a;color:#fff;font-size:13px;cursor:pointer">Retry</button></div>`;
+  setStatus('', false);
+  document.getElementById('cam-hint').textContent = 'Camera could not start — see error above';
 }
 
 function stopScanner() {
-  if (scanner) {
+  if (scanner && scannerRunning) {
     scanner.stop().catch(() => {});
-    scanner = null;
+    scannerRunning = false;
   }
 }
 
+// ─── SCAN HANDLER ─────────────────────────────────────────────────────────
 function onScan(text) {
   stopScanner();
-  
-  // Try to extract code from QR text
-  // Format: "Name: X | Phone: Y | Food: Z | Amount: A | Code: C"
-  let code = null;
-  let nameHint = null;
-  let phoneHint = null;
-  
-  const codeMatch = text.match(/Code:\s*(\S+)/i);
-  const nameMatch = text.match(/Name:\s*([^|]+)/i);
-  const phoneMatch = text.match(/Phone:\s*([^|]+)/i);
-  
-  if (codeMatch) code = codeMatch[1].trim();
-  if (nameMatch) nameHint = nameMatch[1].trim();
-  if (phoneMatch) phoneHint = phoneMatch[1].trim();
-  
-  if (!code) {
-    // Maybe the QR text is just the code itself
-    code = text.trim();
-  }
-  
-  // Find coupon(s) by code
+  setStatus('', false);
+
+  let code = text.trim();
+  // Try to extract "Code: XYZ" pattern if present
+  const m = text.match(/Code:\s*(\S+)/i);
+  if (m) code = m[1].trim();
+
   let matches = byCode[code] || [];
-  
-  // If multiple matches (same code, different people), try to narrow by name/phone
   let coupon = null;
+
   if (matches.length === 1) {
     coupon = matches[0];
   } else if (matches.length > 1) {
-    if (nameHint) {
-      const nm = nameHint.toLowerCase();
-      const byName = matches.find(c => c.name.toLowerCase().includes(nm) || nm.includes(c.name.toLowerCase()));
-      if (byName) coupon = byName;
+    const nameM = text.match(/Name:\s*([^|]+)/i);
+    const phoneM = text.match(/Phone:\s*([^|]+)/i);
+    if (nameM) {
+      const nm = nameM[1].trim().toLowerCase();
+      coupon = matches.find(c => c.name.toLowerCase().includes(nm));
     }
-    if (!coupon && phoneHint) {
-      const ph = phoneHint.replace(/\D/g,'');
-      const byPhone = matches.find(c => c.phone.replace(/\D/g,'').includes(ph) || ph.includes(c.phone.replace(/\D/g,'')));
-      if (byPhone) coupon = byPhone;
+    if (!coupon && phoneM) {
+      const ph = phoneM[1].trim().replace(/\D/g,'');
+      coupon = matches.find(c => c.phone.replace(/\D/g,'').includes(ph));
     }
-    if (!coupon) coupon = matches[0]; // fallback to first
+    if (!coupon) coupon = matches[0];
   }
-  
+
   if (!coupon) {
-    showResult('err', '✗ Coupon Not Found',
-      [['Scanned Code', code], ['Action', 'Not in system — contact organizer']]);
+    showResult('err', '✗ Coupon Not Found', [
+      ['Scanned value', code],
+      ['Action', 'Not in system — contact organiser']
+    ]);
     return;
   }
-  
+
   if (usedMap[coupon.id]) {
     const u = usedMap[coupon.id];
-    const t = u.at ? new Date(u.at).toLocaleTimeString() : '—';
-    showResult('warn', '⚠ Already Used!',
-      [['Name', coupon.name], ['Roll', coupon.roll], ['Food Taken', u.chosenFood || '—'], ['Used At', t]]);
+    showResult('warn', '⚠ Already Used!', [
+      ['Name', coupon.name],
+      ['Roll', coupon.roll],
+      ['Food taken', u.chosenFood || '—'],
+      ['Used at', u.at ? new Date(u.at).toLocaleTimeString() : '—']
+    ]);
     return;
   }
-  
-  // Valid coupon!
+
+  // Valid!
   currentCoupon = coupon;
   selectedFood = null;
-  
-  const rows = [
-    ['Name', coupon.name],
-    ['Roll No', coupon.roll],
-    ['Phone', coupon.phone],
-    ['Food Type', foodBadgeHTML(coupon.food)]
-  ];
-  
+
   const rb = document.getElementById('result-box');
   rb.style.display = 'block';
   rb.className = 'result-box ok';
   document.getElementById('rb-title').textContent = '✓ Valid Coupon';
-  
-  document.getElementById('rb-rows').innerHTML = rows.map(([l,v]) =>
-    `<div class="rb-row"><span class="rb-label">${l}</span><span class="rb-val">${v}</span></div>`
-  ).join('');
-  
-  // Food selection
+  document.getElementById('rb-rows').innerHTML = [
+    ['Name', coupon.name],
+    ['Roll No', coupon.roll],
+    ['Phone', coupon.phone],
+    ['Food type', foodBadge(coupon.food)]
+  ].map(([l,v]) => `<div class="rb-row"><span class="rb-label">${l}</span><span class="rb-val">${v}</span></div>`).join('');
+
   const fs = document.getElementById('food-sel');
   if (coupon.food === 'Both') {
     fs.innerHTML = `<p>SELECT FOOD PREFERENCE</p>
@@ -476,73 +452,83 @@ function showResult(cls, title, rows) {
   document.getElementById('confirm-btn').style.display = 'none';
 }
 
-async function confirmRedeem() {
+function confirmRedeem() {
   if (!currentCoupon || !selectedFood) return;
-  
   usedMap[currentCoupon.id] = { at: new Date().toISOString(), chosenFood: selectedFood };
   saveLocal();
-  
-  const name = currentCoupon.name;
-  const food = selectedFood;
+  const name = currentCoupon.name, food = selectedFood;
   currentCoupon = null;
-  
-  showResult('ok', '✅ Redeemed Successfully!',
-    [['Name', name], ['Food', food], ['Status', 'Marked as used']]);
+  showResult('ok', '✅ Redeemed!', [['Name', name], ['Food', food], ['Status', 'Marked as used']]);
   document.getElementById('confirm-btn').style.display = 'none';
   document.getElementById('food-sel').innerHTML = '';
-  
-  toast('Coupon redeemed! ✓');
+  toast('Coupon redeemed ✓');
   updateAdmin();
-  
-  // Sync in background
   syncWithCloud();
 }
 
 function resetScan() {
-  currentCoupon = null;
-  selectedFood = null;
+  currentCoupon = null; selectedFood = null;
   document.getElementById('result-box').style.display = 'none';
   document.getElementById('food-sel').innerHTML = '';
   document.getElementById('confirm-btn').style.display = 'none';
-  if (!scanner) startScanner();
+  startScanner();
 }
 
-// ─────────────────────────────────────────────────────────────────────────────
-// LIST
-// ─────────────────────────────────────────────────────────────────────────────
+// ─── CLOUD SYNC ───────────────────────────────────────────────────────────
+async function syncWithCloud() {
+  try {
+    setSyncDot('syncing');
+    const res = await fetch("https://api.anthropic.com/v1/messages", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        model: "claude-sonnet-4-20250514",
+        max_tokens: 4096,
+        system: `You are a JSON state sync service. Merge local state with stored state. Never remove entries. Reply with ONLY raw JSON, no markdown.\nStored: ${JSON.stringify(usedMap)}`,
+        messages: [{ role: "user", content: "SYNC|local=" + JSON.stringify(usedMap) }]
+      })
+    });
+    if (!res.ok) throw new Error(res.status);
+    const data = await res.json();
+    const text = data.content.filter(b => b.type==='text').map(b=>b.text).join('');
+    const merged = JSON.parse(text.trim().replace(/```json|```/g,''));
+    let changed = false;
+    Object.keys(merged).forEach(id => { if (!usedMap[id]) { usedMap[id] = merged[id]; changed = true; } });
+    if (changed) { saveLocal(); renderList(); updateAdmin(); }
+    setSyncDot('ok');
+    document.getElementById('last-sync').textContent = new Date().toLocaleTimeString();
+    document.getElementById('sync-mode').textContent = 'Cloud Sync ✓';
+  } catch(e) {
+    setSyncDot('err');
+    document.getElementById('sync-mode').textContent = 'Local Only';
+  }
+}
+
+function setSyncDot(s) {
+  document.getElementById('sync-dot').style.background = s==='ok'?'#4ade80':s==='syncing'?'#fbbf24':'#f87171';
+}
+async function forceSync() { toast('Syncing…'); await syncWithCloud(); toast('Done ✓'); }
+
+// ─── LIST ─────────────────────────────────────────────────────────────────
 function renderList(q = '') {
   const q2 = q.toLowerCase();
   const filtered = q2 ? COUPONS.filter(c =>
-    c.name.toLowerCase().includes(q2) ||
-    c.roll.toLowerCase().includes(q2) ||
-    c.phone.includes(q2) ||
-    c.code.includes(q2)
-  ) : COUPONS;
-  
-  let vAct = 0, nAct = 0, used = 0;
-  COUPONS.forEach(c => {
-    if (usedMap[c.id]) { used++; return; }
-    if (c.food === 'Veg') vAct++;
-    else if (c.food === 'Non Veg') nAct++;
-  });
-  document.getElementById('sv-count').textContent = vAct;
-  document.getElementById('sn-count').textContent = nAct;
-  document.getElementById('sb-count').textContent = used;
-  
+    c.name.toLowerCase().includes(q2)||c.roll.toLowerCase().includes(q2)||
+    c.phone.includes(q2)||c.code.includes(q2)) : COUPONS;
+
+  let vAct=0,nAct=0,used=0;
+  COUPONS.forEach(c => { if (usedMap[c.id]) used++; else if (c.food==='Veg') vAct++; else if (c.food==='Non Veg') nAct++; });
+  document.getElementById('sv-count').textContent=vAct;
+  document.getElementById('sn-count').textContent=nAct;
+  document.getElementById('sb-count').textContent=used;
+
   const list = document.getElementById('coupon-list');
-  if (!filtered.length) {
-    list.innerHTML = '<div class="empty"><div class="ei">🔍</div><p>No results</p></div>';
-    return;
-  }
-  
+  if (!filtered.length) { list.innerHTML='<div class="empty"><div class="ei">🔍</div><p>No results</p></div>'; return; }
   list.innerHTML = filtered.map(c => {
     const u = usedMap[c.id];
     return `<div class="c-item${u?' used':''}" onclick="openModal('${c.id}')">
       <div>${foodDot(c.food)}</div>
-      <div class="ci-info">
-        <div class="ci-name">${c.name}</div>
-        <div class="ci-sub">${c.roll} · ${c.phone}</div>
-      </div>
+      <div class="ci-info"><div class="ci-name">${c.name}</div><div class="ci-sub">${c.roll} · ${c.phone}</div></div>
       <div class="ci-status ${u?'used':'ok'}">${u?'Used':'✓'}</div>
     </div>`;
   }).join('');
@@ -553,144 +539,84 @@ function foodDot(f) {
   if (f==='Non Veg') return '<span class="badge bn"><span class="dot dn"></span>NV</span>';
   return '<span class="badge ba"><span class="dot da"></span>Both</span>';
 }
-function foodBadgeHTML(f) {
-  if (f==='Veg') return '<span class="badge bv"><span class="dot dv"></span>Veg</span>';
-  if (f==='Non Veg') return '<span class="badge bn"><span class="dot dn"></span>Non Veg</span>';
-  return '<span class="badge bv"><span class="dot dv"></span>Veg</span> <span class="badge bn"><span class="dot dn"></span>Non Veg</span>';
+function foodBadge(f) {
+  if (f==='Veg') return '<span class="badge bv">🟢 Veg</span>';
+  if (f==='Non Veg') return '<span class="badge bn">🔴 Non Veg</span>';
+  return '<span class="badge bv">🟢 Veg</span> <span class="badge bn">🔴 Non Veg</span>';
 }
 
-// ─────────────────────────────────────────────────────────────────────────────
-// MODAL
-// ─────────────────────────────────────────────────────────────────────────────
+// ─── MODAL ────────────────────────────────────────────────────────────────
 function openModal(id) {
-  const c = byId[id];
-  if (!c) return;
+  const c = byId[id]; if (!c) return;
   modalCouponId = id;
   const u = usedMap[id];
   document.getElementById('modal-title').textContent = c.name;
-  
-  const rows = [
-    ['Roll No', c.roll],
-    ['Phone', c.phone],
-    ['Food Type', c.food],
-    ['Status', u ? '✗ Used' : '✓ Active'],
-  ];
-  if (u) {
-    rows.push(['Chosen Food', u.chosenFood || '—']);
-    rows.push(['Used At', u.at ? new Date(u.at).toLocaleString() : '—']);
-  }
-  
-  document.getElementById('modal-body').innerHTML = rows.map(([l,v]) =>
-    `<div class="m-row"><span class="m-label">${l}</span><span class="m-val">${v}</span></div>`
-  ).join('');
-  
-  const rb = document.getElementById('modal-reset-btn');
-  rb.style.display = u ? 'block' : 'none';
-  
+  const rows = [['Roll',c.roll],['Phone',c.phone],['Food',c.food],['Status',u?'✗ Used':'✓ Active']];
+  if (u) { rows.push(['Chosen Food',u.chosenFood||'—']); rows.push(['Used At',u.at?new Date(u.at).toLocaleString():'—']); }
+  document.getElementById('modal-body').innerHTML = rows.map(([l,v])=>
+    `<div class="m-row"><span class="m-label">${l}</span><span class="m-val">${v}</span></div>`).join('');
+  document.getElementById('modal-reset-btn').style.display = u?'block':'none';
   document.getElementById('modal-bg').classList.add('on');
 }
-
 function closeModal(e) {
   if (e && e.target !== document.getElementById('modal-bg')) return;
   document.getElementById('modal-bg').classList.remove('on');
   modalCouponId = null;
 }
-
 function resetSingle() {
-  if (!modalCouponId) return;
-  if (!confirm('Reset this coupon? It can be scanned again.')) return;
-  delete usedMap[modalCouponId];
-  saveLocal();
-  closeModal();
+  if (!modalCouponId || !confirm('Reset this coupon?')) return;
+  delete usedMap[modalCouponId]; saveLocal(); closeModal();
   renderList(document.getElementById('search-inp').value);
-  updateAdmin();
-  syncWithCloud();
-  toast('Coupon reset');
+  updateAdmin(); syncWithCloud(); toast('Coupon reset');
 }
 
-// ─────────────────────────────────────────────────────────────────────────────
-// ADMIN
-// ─────────────────────────────────────────────────────────────────────────────
+// ─── ADMIN ────────────────────────────────────────────────────────────────
 function updateAdmin() {
-  const scanned = Object.keys(usedMap).length;
-  document.getElementById('ad-scanned').textContent = scanned;
-  document.getElementById('ad-remain').textContent = 420 - scanned;
-  
+  const sc = Object.keys(usedMap).length;
+  document.getElementById('ad-scanned').textContent = sc;
+  document.getElementById('ad-remain').textContent = 420 - sc;
   let v=0,nv=0,b=0;
-  COUPONS.forEach(c => {
-    if (!usedMap[c.id]) {
-      if (c.food==='Veg') v++;
-      else if (c.food==='Non Veg') nv++;
-      else b++;
-    }
-  });
-  document.getElementById('ad-veg').textContent = v + ' remaining';
-  document.getElementById('ad-nv').textContent = nv + ' remaining';
-  document.getElementById('ad-both').textContent = b + ' remaining';
+  COUPONS.forEach(c=>{ if(!usedMap[c.id]){ if(c.food==='Veg')v++; else if(c.food==='Non Veg')nv++; else b++; } });
+  document.getElementById('ad-veg').textContent=v+' remaining';
+  document.getElementById('ad-nv').textContent=nv+' remaining';
+  document.getElementById('ad-both').textContent=b+' remaining';
 }
-
 function exportCSV() {
-  const rows = [['Name','Roll','Phone','Food Type','Chosen Food','Used At']];
-  COUPONS.forEach(c => {
-    const u = usedMap[c.id];
-    if (u) rows.push([c.name, c.roll, c.phone, c.food, u.chosenFood||'', u.at||'']);
-  });
-  const csv = rows.map(r => r.map(v => `"${v}"`).join(',')).join('\n');
-  const a = document.createElement('a');
-  a.href = 'data:text/csv;charset=utf-8,' + encodeURIComponent(csv);
-  a.download = 'scanned_coupons_' + new Date().toISOString().slice(0,10) + '.csv';
-  a.click();
+  const rows=[['Name','Roll','Phone','Food Type','Chosen Food','Used At']];
+  COUPONS.forEach(c=>{ const u=usedMap[c.id]; if(u) rows.push([c.name,c.roll,c.phone,c.food,u.chosenFood||'',u.at||'']); });
+  const csv=rows.map(r=>r.map(v=>`"${v}"`).join(',')).join('\n');
+  const a=document.createElement('a'); a.href='data:text/csv;charset=utf-8,'+encodeURIComponent(csv);
+  a.download='scanned_'+new Date().toISOString().slice(0,10)+'.csv'; a.click();
 }
-
 function resetAll() {
-  if (!confirm('RESET ALL SCANS? This cannot be undone.')) return;
-  if (!confirm('Are you absolutely sure? All scan records will be deleted.')) return;
-  usedMap = {};
-  saveLocal();
-  renderList();
-  updateAdmin();
-  syncWithCloud();
-  toast('All scans reset');
+  if (!confirm('RESET ALL SCANS?')||!confirm('Absolutely sure?')) return;
+  usedMap={}; saveLocal(); renderList(); updateAdmin(); syncWithCloud(); toast('All scans reset');
 }
 
-// ─────────────────────────────────────────────────────────────────────────────
-// TABS
-// ─────────────────────────────────────────────────────────────────────────────
+// ─── TABS ─────────────────────────────────────────────────────────────────
 function goTab(tab) {
-  document.querySelectorAll('.tab').forEach((el,i) => {
-    el.classList.toggle('on', ['scan','list','admin'][i] === tab);
+  ['scan','list','admin'].forEach((t,i) => {
+    document.querySelectorAll('.tab')[i].classList.toggle('on', t===tab);
+    document.getElementById('pg-'+t).classList.toggle('on', t===tab);
   });
-  document.querySelectorAll('.pg').forEach((el,i) => {
-    el.classList.toggle('on', ['pg-scan','pg-list','pg-admin'][i] === 'pg-'+tab);
-  });
-  if (tab === 'scan') {
-    if (!scanner) startScanner();
-  } else {
-    stopScanner();
-    if (tab === 'list') renderList(document.getElementById('search-inp').value);
-    if (tab === 'admin') updateAdmin();
-  }
+  if (tab==='scan') { /* camera only starts on button tap */ }
+  else { stopScanner(); }
+  if (tab==='list') renderList(document.getElementById('search-inp').value);
+  if (tab==='admin') updateAdmin();
 }
 
-// ─────────────────────────────────────────────────────────────────────────────
-// TOAST
-// ─────────────────────────────────────────────────────────────────────────────
+// ─── TOAST ────────────────────────────────────────────────────────────────
 let toastTimer;
 function toast(msg) {
-  const t = document.getElementById('toast');
-  t.textContent = msg;
-  t.classList.add('show');
-  clearTimeout(toastTimer);
-  toastTimer = setTimeout(() => t.classList.remove('show'), 2500);
+  const t=document.getElementById('toast'); t.textContent=msg; t.classList.add('show');
+  clearTimeout(toastTimer); toastTimer=setTimeout(()=>t.classList.remove('show'),2500);
 }
 
-// ─────────────────────────────────────────────────────────────────────────────
-// INIT
-// ─────────────────────────────────────────────────────────────────────────────
+// ─── INIT ─────────────────────────────────────────────────────────────────
 loadLocal();
-startScanner();
 updateAdmin();
-startAutoSync();
+syncWithCloud();
+setInterval(syncWithCloud, 30000);
 </script>
 </body>
 </html>
